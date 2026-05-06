@@ -38,23 +38,24 @@ const TerrenosApp = () => {
   }, [lotesData]);
 
   useEffect(() => {
-    localStorage.setItem('planosAdjuntos', JSON.stringify(planosAdjuntos));
-  }, [planosAdjuntos]);
+    localStorage.setItem('sAdjuntos', JSON.stringify(sAdjuntos));
+  }, [sAdjuntos]);
 
   const proyectoInfo = {
-    nombre: "Lotes Islas Agrarias",
-    ubicacion: "Sobre carretera Islas Agrarias, Mexicali, B.C.",
-    precioTotal: 400000,
-    enganche: 24000,
-    mensualidad: 3900,
-    plazo: 96,
+    nombre: "Pre-Venta Lotes",
+    ubicacion: "El Dorado, Lomas del Valle, Mexicali, B.C.",
+    precioTotal: 560000,
+    enganche: 33600,
+    mensualidad: 4500,
+    plazo: 123,
     superficieLote: 200,
     registro: "PROFECO 1671/2023 y 0558/2026",
-    amenidades: ["Área verde con asador y sombra", "Playground infantil", "Corredor perimetral", "Factibilidad de luz"]
+    amenidades: ["Área verde con asador y sombra", "Playground infantil", "Corredor perimetral", "Factibilidad de luz", "A Pie de Carretera"],
+    nichos: ["Transporte", "Almacen", "Trabajadores y Familias Jovenes", "Fabricas", "Logistica"],
   };
 
   useEffect(() => {
-    fetch('https://api.open-meteo.com/v1/forecast?latitude=32.6245&longitude=-115.4523&current=temperature_2m,apparent_temperature&timezone=America/Los_Angeles')
+    fetch('https://historical-forecast-api.open-meteo.com/v1/forecast?latitude=32.6278&longitude=-115.4545&start_date=2020-01-01&end_date=2026-05-06&daily=sunrise,sunset,daylight_duration,uv_index_max&hourly=temperature_2m,relative_humidity_2m,weather_code,temperature_80m&timezone=auto&temperature_unit=fahrenheit')
       .then(res => res.json())
       .then(data => setWeather(data.current))
       .catch(() => {});
@@ -62,7 +63,7 @@ const TerrenosApp = () => {
 
   const tabs = [
     { id: 'dashboard', icon: Home, label: 'Dashboard' },
-    { id: 'plano', icon: Map, label: 'Plano' },
+    { id: '', icon: Map, label: '' },
     { id: 'distribucion', icon: Settings, label: 'Diseña Casa' },
     { id: 'materiales', icon: FileText, label: 'Materiales' },
     { id: 'clientes', icon: Users, label: 'CRM' },
@@ -123,7 +124,7 @@ const TerrenosApp = () => {
 
       <main className="container mx-auto px-4 py-6">
         {activeTab === 'dashboard' && <Dashboard proyectoInfo={proyectoInfo} clientes={clientes} clientesSelectos={clientesSelectos} />}
-        {activeTab === 'plano' && <PlanoInteractivo lotesData={lotesData} setLotesData={setLotesData} planosAdjuntos={planosAdjuntos} setPlanosAdjuntos={setPlanosAdjuntos} selectedLote={selectedLote} setSelectedLote={setSelectedLote} setShowModal={setShowModal} proyectoInfo={proyectoInfo} />}
+        {activeTab === '' && <PlanoInteractivo lotesData={lotesData} setLotesData={setLotesData} planosAdjuntos={planosAdjuntos} setPlanosAdjuntos={setPlanosAdjuntos} selectedLote={selectedLote} setSelectedLote={setSelectedLote} setShowModal={setShowModal} proyectoInfo={proyectoInfo} />}
         {activeTab === 'distribucion' && <DisenatuCasa />}
         {activeTab === 'materiales' && <GuiaMateriales />}
         {activeTab === 'clientes' && <CRMClientes clientes={clientes} setClientes={setClientes} clientesSelectos={clientesSelectos} setClientesSelectos={setClientesSelectos} />}
@@ -1170,7 +1171,7 @@ Sin intereses • Sin aval • Sin buró
               type="range" 
               min="24000" 
               max="200000" 
-              step="5000"
+              step="1000"
               value={enganche}
               onChange={e => setEnganche(Number(e.target.value))}
               className="w-full h-4 bg-black rounded-lg"
@@ -1182,7 +1183,7 @@ Sin intereses • Sin aval • Sin buró
             <input 
               type="range" 
               min="12" 
-              max="120" 
+              max="123" 
               step="12"
               value={plazo}
               onChange={e => setPlazo(Number(e.target.value))}
@@ -1196,7 +1197,7 @@ Sin intereses • Sin aval • Sin buró
               type="range" 
               min="1" 
               max="20" 
-              step="0.5"
+              step="0.2"
               value={comisionPersonalizada}
               onChange={e => setComisionPersonalizada(Number(e.target.value))}
               className="w-full h-4 bg-black rounded-lg"
